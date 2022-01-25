@@ -4,7 +4,7 @@
 <title>Restore PS4Trainer Offline by Karo For 505 & 672 & 702 & 755 & 900</title>
 <style type="text/css">
 body {
-  background-color:#1A1920;
+  background-image: url('1.jpg');
   background-repeat:no-repeat;
   height:100%;
  }
@@ -143,12 +143,12 @@ button:hover {
   var dt = new Date();
     Hour= dt.getHours();
   Minute= dt.getMinutes();
+  Month=dt.getMonth()+1;
      Day=dt.getDate();
-   Month=dt.getMonth()+1;
    Year=dt.getFullYear();
 if (Minute < 10) { Minute = "0" + Minute; };
 if (Hour < 10) { Hour = "0" + Hour; };
-document.getElementById("date").innerHTML = (Day+"/"+Month+"/"+Year);
+document.getElementById("date").innerHTML = (Month+"/"+Day+"/"+Year);
 document.getElementById("clock").innerHTML = (Hour+":"+Minute);
   }
   
