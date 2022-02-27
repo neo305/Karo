@@ -6,7 +6,6 @@ app-dumper.bin
 backupdb.bin
 disableaslr.bin
 disableupdates.bin
-enablebrowser.bin
 enableupdates.bin
 exitidu.bin
 exploit.js
@@ -20,7 +19,7 @@ fan80.bin
 frontend.js
 ftp.bin
 goldhen2b.bin
-goldhen2b2.bin
+goldhen_2.1.2_900.bin
 historyblocker.bin
 index.html
 lndex.html
@@ -40,7 +39,6 @@ permanentuart.bin
 ps4debug.bin
 relocator.js
 restoredb.bin
-rifrenamer.bin
 rop.js
 ropb2.js
 syscalls.js
