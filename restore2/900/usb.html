@@ -6,7 +6,7 @@ margin:auto;
 font-family:sans-serif;
 font-size:20px;
 font-weight:lighter;
-text-align:left;
+text-align:center;
 color:#FFFFFF;
 background-size:cover;
 }
@@ -24,17 +24,18 @@ background-size:cover;
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
  .content {
-  width:80%;
+  width:90%;
   height:15%;
-  margin-left:7.5%;
+  margin-left:3.5%;
   background:rgba(0,0,0,0.5);
   color:white;
-  margin-top:1%;
+  margin-top:0%;
   font-size:25px;
   text-align:center;
   border-radius:30px;
   padding:20px;
   line-height:12px;
+  position:absolute;bottom:0px;
  }
  .title {
   font-size:40px;
@@ -194,16 +195,15 @@ function allset() {
 window.progress.innerHTML="Payload loaded";
 }
 
-PLfile = "restore900usb.bin";
 </script>
-<script src="int64.js"></script>
-<script src="rop.js"></script>
-<script src="kexploitusb.js"></script>
-<script src="webkit.js"></script>
+<script src="./int64.js"></script>
+<script src="./rop.js"></script>
+<script src="./kexploit.js"></script>
+<script type=module src="./alert.mjs"></script>
 </head>
 <body style='background-color:#1A1920'>
-<h1 style='text-shadow: 4px 4px 4px black;font-size:30px;text-align:center;text-shadow: 4px 4px 4px black;color:yellow;'>Karo PS4Trainer Restore 9.00 FW</h1><br><br><br><br><br><br><br><br>
-<h1 id=progress style='font-size:25px;text-align:center;text-shadow: 4px 4px 4px black;color:white;'>Restoring....</h1><br>
+<h1 style='text-shadow: 4px 4px 4px black;font-size:30px;text-align:center;text-shadow: 4px 4px 4px black;color:yellow;'>Karo PS4Trainer Restore 9.00 FW</h1><br><br><br><br>
+<h1 id=progress style='font-size:25px;text-align:center;text-shadow: 4px 4px 4px black;color:white;'>Jailbreaking....</h1><br>
 <br><br><br><br><br><br>
 <div class="content" >
  	    <div class="text" >
@@ -212,16 +212,40 @@ PLfile = "restore900usb.bin";
 	    </div>
 </div>
 <script>
-var xhr = new XMLHttpRequest();
-xhr.responseType = "arraybuffer";
-xhr.open("GET",PLfile,true);
-xhr.send();
-xhr.onreadystatechange=function(){
-if (xhr.readyState == 4){
-  PLS = xhr.response;
-  setTimeout(poc, 1500); 
+function load_pocB(){
+ var req = new XMLHttpRequest();
+ req.responseType = "arraybuffer";
+ req.open('GET', PLfile);
+ req.send();
+ req.onreadystatechange = function () {
+  if (req.readyState == 4) {
+   PLD = req.response;
+   var payload_buffer = chain.syscall(477, 0, PLD.byteLength*4 , 7, 0x1002, -1, 0);
+   var pl = p.array_from_address(payload_buffer, PLD.byteLength*4);
+   var padding = new Uint8Array(4 - (req.response.byteLength % 4) % 4);
+   var tmp = new Uint8Array(req.response.byteLength + padding.byteLength);
+   tmp.set(new Uint8Array(req.response), 0);
+   tmp.set(padding, req.response.byteLength);
+   var shellcode = new Uint32Array(tmp.buffer);
+   pl.set(shellcode,0);
+   var pthread = p.malloc(0x10);
+   chain.call(libKernelBase.add32(OFFSET_lk_pthread_create), pthread, 0x0, payload_buffer, 0);
+   allset();
   }
-};
+ };
+}
+
+function jbdone() {
+window.progress.innerHTML="Jailbreak Done";
+restore();
+}
+function restore(){
+    progress.innerHTML="loading... please wait";
+    LoadedMSG="Restore Loaded";
+    PLfile = "restore900usb.bin";
+    out_jb = "AllPL";
+    load_pocB();
+    }
 </script>
 </body>
 
